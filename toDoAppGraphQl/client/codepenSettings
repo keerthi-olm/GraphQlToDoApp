@@ -1,0 +1,6 @@
+codepen
+https://cdnjs.cloudflare.com/ajax/libs/react/16.3.1/umd/react.development.js
+https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.3.1/umd/react-dom.development.js
+https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.2/prop-types.min.js
+
+Codepen - CreateRef does not work wthout above
