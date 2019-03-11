@@ -31,7 +31,9 @@ app.post('/api/items', (req, res) => {
 
 // get all item
 app.get('/api/items', (req, res) => {
-    Item.findAll().then(items => res.json(items))
+    Item.findAll(
+{attributes: ['text']}
+      ).then(items => res.json(items))
 })
 
 // get all done items

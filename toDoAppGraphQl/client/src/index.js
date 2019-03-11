@@ -1,12 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import axios from 'axios';
 
 import "./styles.css";
 
 class ToDoApp extends React.Component {
   constructor(props) {
     super();
+    axios(`http://localhost:3000/api/items`)
+      .then(res => {
+        const myitems = res.data;
+        // this.setState({ persons });
+        // [items]=[...myitems];
+        console.log(myitems);
+      })
+      // this.items=items.map(function(a){return a.text});
+      // console.log(items);
     this.state = { list: props.list, change: "false" , doneList:props.doneList };
     this.newItem = React.createRef();
     this.doneList=[...props.doneList];
