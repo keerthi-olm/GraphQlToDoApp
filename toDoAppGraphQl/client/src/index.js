@@ -8,16 +8,10 @@ import "./styles.css";
 class ToDoApp extends React.Component {
   constructor(props) {
     super();
-    axios(`http://localhost:3000/api/items`)
-      .then(res => {
-        const myitems = res.data;
-        // this.setState({ persons });
-        // [items]=[...myitems];
-        console.log(myitems);
-      })
-      // this.items=items.map(function(a){return a.text});
-      // console.log(items);
-    this.state = { list: props.list, change: "false" , doneList:props.doneList };
+    var items=[];
+
+
+    this.state = { list: [], change: "false" , doneList:[]};
     this.newItem = React.createRef();
     this.doneList=[...props.doneList];
     this.list=[...this.state.list];
@@ -27,6 +21,25 @@ class ToDoApp extends React.Component {
         JSON.stringify(this.list)
     );
   }
+
+componentDidMount() {
+    axios(`http://localhost:3000/api/items`,{crossDomain: true})
+      .then(res => {
+        const myitems = res.data;
+        // this.setState({ persons });
+         var items_list=[...myitems];
+            var items=items_list.map(function(a){return a.text});
+            var filtered = items_list.filter(function(value, index, arr){     console.log('--->');console.log(value.done);
+                                        return value.done===true;
+                                        });
+
+            var doneList=filtered.map(function(a){return a.id });
+
+     console.log(doneList);
+     this.setState({ list: [...items_list] ,doneList:[...doneList] });
+     
+      });
+}
 
 componentWillUpdate(nextProps, nextState) {
    console.log('will update');
@@ -50,7 +63,7 @@ componentWillUpdate(nextProps, nextState) {
             <button onClick={this._handleResetList}>Reset</button>
           </li>
           {this.state.list.map((value, i) => {
-            return <ToDoList key={i} i={i} item={value} remove={this._handleRemoveDoneItems} removeItem={this._handleUpdateDoneList}/>;
+            return <ToDoList key={i} i={value.id} item={value.text} done={this.state.doneList} remove={this._handleRemoveDoneItems} removeItem={this._handleUpdateDoneList}/>;
           })}
           <li className="footer"><button className='remove'  onClick={this._handleRemoveDoneItems}>
           Remove
@@ -63,20 +76,48 @@ componentWillUpdate(nextProps, nextState) {
   _handleAddItem = () => {
     //  let newItem =this.refs.newItem.value;
     let newItem = this.newItem.current["value"];
-    if (newItem!=='') {
-        this.setState({ list: [...this.state.list, newItem] });
-        this.newItem.current["value"]='';
-        // this.doneList[this.state.list.length]=false;
-        console.log(this.doneList);
 
-        console.log("\n ***Add Button Pressed... **");
-        console.log(
-          "Add handler will pull value from the input field and set the new state for ToDO app"
-        );
-        console.log(
-          "Tip : You can use React.createRef() to reference Virtual DOM elements.  ");
-     }
 
+    // if (newItem!=='') {
+    //     this.setState({ list: [...this.state.list, newItem] });
+    //     this.newItem.current["value"]='';
+    //     // this.doneList[this.state.list.length]=false;
+    //     console.log(this.doneList);
+
+    //     console.log("\n ***Add Button Pressed... **");
+    //     console.log(
+    //       "Add handler will pull value from the input field and set the new state for ToDO app"
+    //     );
+    //     console.log(
+    //       "Tip : You can use React.createRef() to reference Virtual DOM elements.  ");
+     // }
+
+    // axios(`http://localhost:3000/api/items`,{crossDomain: true})
+    //   .then(res => {
+    //     const myitems = res.data;
+    //     // this.setState({ persons });
+    //      var items_list=[...myitems];
+    //         var items=items_list.map(function(a){return a.text});
+    //         var filtered = items_list.filter(function(value, index, arr){     console.log('--->');console.log(value.done);
+    //                                     return value.done===true;
+    //                                     });
+
+    //         var doneList=filtered.map(function(a){return a.id });
+
+    //  console.log(doneList);
+    //  this.setState({ list: [...items_list] ,doneList:[...doneList] });
+     
+    //   });
+
+    axios.post(`http://localhost:3000/api/items`,{
+    text: newItem,
+  },{crossDomain: true},)
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 
   };
 
@@ -108,22 +149,23 @@ componentWillUpdate(nextProps, nextState) {
 
   _handleUpdateDoneList = id => {
 
+      this.state.list
 
-      let checkIfInDoneList = this.doneList.filter(function (val) {
-          return (val === id);
-      });
+      // let checkIfInDoneList = this.doneList.filter(function (val) {
+      //     return (val === id);
+      // });
 
-      if (checkIfInDoneList===undefined || checkIfInDoneList.length===0) {
-      // add to list
-      this.doneList.push(id);
-      } else {
-      //delete from list
-      this.doneList= this.doneList.filter(function (val) {
-          return (val !== id);
-      });
-      }
-           console.log('donelist afterremove-->');
-           console.log(this.doneList);
+      // if (checkIfInDoneList===undefined || checkIfInDoneList.length===0) {
+      // // add to list
+      // this.doneList.push(id);
+      // } else {
+      // //delete from list
+      // this.doneList= this.doneList.filter(function (val) {
+      //     return (val !== id);
+      // });
+      // }
+      //      console.log('donelist afterremove-->');
+      //      console.log(this.doneList);
 
   };
 
@@ -162,15 +204,15 @@ class ToDoList extends React.Component {
     this.setState({
       checked: !this.state.checked
     });
-   this.props.removeItem(e.target.id);
+   this.props.removeItem(this.props.i);
   }
 
   render() {
     /** RENDER  **/
     console.log("-- render");
     
-    let text = this.state.checked ? <strike>{this.state.value}</strike> : this.state.value;
-    let checked= this.state.checked ? 'checked' : '';
+    let text = this.props.done ? <strike>{this.state.value}</strike> : this.state.value;
+    let checked= this.props.done ? 'checked' : '';
     return (
       <li className="todo_item ">
         <input className='checkbox' type="checkbox" onClick={this._handleCheckBoxClick} id={this.props.i} checked={checked} />{text}

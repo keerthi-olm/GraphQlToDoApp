@@ -1,4 +1,5 @@
 const express = require('express')
+const Cors= require('cors')
 const bodyParser = require('body-parser')
 const { Item, Done } = require('./sequelize')
 // * * * * *  ^^^ * * * * * * * * * Bring the MODELS  * * * * * * * * * * * * * *
@@ -15,7 +16,7 @@ const { Item, Done } = require('./sequelize')
 //  * * * * * * * * * * * * * * Start express server  * * * * * * * * * * * * * *
 const app = express()
 
-
+app.use(Cors());
 
 app.use(bodyParser.json());
 
@@ -32,18 +33,37 @@ app.post('/api/items', (req, res) => {
 // get all item
 app.get('/api/items', (req, res) => {
     Item.findAll(
-{attributes: ['text']}
+{attributes: ['text','done','id']}
       ).then(items => res.json(items))
 })
+
+// get all item
+app.post('/api/add_items', (req, res) => {
+Item.update({
+    text: req.body.text,    
+    done: false
+
+}, {
+    where: {
+        id: req.body.id
+    }
+})
+})
+
+
+
 
 // get all done items
 app.get('/api/done_items', (req, res) => {
 Item.findAll({
+  attributes: ['id'],
   where: {
     done: false
       }
     }).then(items => res.json(items))
 })
+
+
 
 // Delete all done items
 app.delete('/api/delete_done_items', (req, res) => {
