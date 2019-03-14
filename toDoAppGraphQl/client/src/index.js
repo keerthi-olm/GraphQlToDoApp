@@ -13,6 +13,7 @@ class ToDoApp extends React.Component {
     this.newItem = React.createRef();
     this.doneList=[...props.doneList];
     this.list=[...this.state.list];
+    
   }
 
 componentDidMount() {
@@ -21,29 +22,26 @@ componentDidMount() {
 
 getItems() {
 
-      axios(`http://localhost:3000/api/items`,{crossDomain: true})
-      .then(res => {
-        const myitems = res.data;
-        // this.setState({ persons });
-         var items_list=[...myitems];
-            var items=items_list.map(function(a){return a.text});
-            var filtered = items_list.filter(function(value, index, arr){     console.log('--->');console.log(value.done);
-                                        return value.done===true;
-                                        });
+  axios(`http://localhost:3000/api/items`,{crossDomain: true})
+  .then(res => {
+    const myitems = res.data;
+    // this.setState({ persons });
+    var items_list=[...myitems];
+    var items=items_list.map(function(a){return a.text});
+    var filtered = items_list.filter(function(value, index, arr){  
+                                    return value.done===true;
+                                    });
 
-            var doneList=filtered.map(function(a){return a.id });
-
-     console.log(doneList);
-     this.setState({ list: [...items_list] ,doneList:[...doneList] });
-     
-      });
+    var doneList=filtered.map(function(a){return a.id });
+    this.setState({ list: [...items_list] ,doneList:[...doneList] });  
+  });
 }
 
 componentWillUpdate(nextProps, nextState) {
-   console.log('will update');
-       this.doneList=[];
-    this.list=[...nextState.list];
-    console.log(this.list);
+  this.doneList=[];
+  this.list=[...nextState.list];
+  this.newItem.current["value"]='';
+
 }
 
 render() {
@@ -73,7 +71,6 @@ let done=this.state.doneList;
   }
 
   _handleAddItem = () => {
-    //  let newItem =this.refs.newItem.value;
     let newItem = this.newItem.current["value"];
     let getItems=this.getItems;
     let _self=this;
@@ -82,8 +79,7 @@ let done=this.state.doneList;
     text: newItem,
       },{crossDomain: true},)
       .then(function (response) {
-        getItems.call(_self)
-        console.log(response);
+        getItems.call(_self);
       })
       .catch(function (error) {
         console.log(error);
@@ -97,8 +93,7 @@ let done=this.state.doneList;
         axios.delete(`http://localhost:3000/api/delete_items`,{
       },{crossDomain: true},)
       .then(function (response) {
-        getItems.call(_self)
-        console.log(response);
+        getItems.call(_self);
       })
       .catch(function (error) {
         console.log(error);
@@ -112,8 +107,7 @@ let done=this.state.doneList;
         axios.delete(`http://localhost:3000/api/delete_done_items`,{
       },{crossDomain: true},)
       .then(function (response) {
-        getItems.call(_self)
-        console.log(response);
+        getItems.call(_self);
       })
       .catch(function (error) {
         console.log(error);
@@ -122,7 +116,6 @@ let done=this.state.doneList;
   };
 
   _handleUpdateDoneList = (id,done) => {
-    console.log(id);
     let getItems=this.getItems;
     let _self=this;
     axios.post(`http://localhost:3000/api/done_items`,{
@@ -130,8 +123,7 @@ let done=this.state.doneList;
         id: id,
       },{crossDomain: true},)
       .then(function (response) {
-        getItems.call(_self)
-        console.log(response);
+        getItems.call(_self);
       })
       .catch(function (error) {
         console.log(error);
@@ -146,7 +138,7 @@ ToDoApp.propTypes = {
 };
 
 ToDoApp.defaultProps = {
-  list: ["Get up in the morning", "Brush my teeth"],
+  list: [],
   doneList: []
 };
 

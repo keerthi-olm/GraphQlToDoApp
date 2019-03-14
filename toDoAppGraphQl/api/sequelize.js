@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize')
 const ItemModel = require('./models/item')
-const DoneModel = require('./models/done')
 
 
 // * * * * * * * * * * * * * * * Connect to db * * * * * * * * * * * * * *
-const sequelize = new Sequelize('to_do', 'root', '', {
+const sequelize = new Sequelize('to_do', 'wp', 'todo', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {

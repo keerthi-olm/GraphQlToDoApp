@@ -12,6 +12,9 @@ const { Item, Done } = require('./sequelize')
 //touch ./models/user.js ./models/blog.js ./models/tag.js
 //touch sequelize.js 
 //touch index.js
+// GraphQl example : https://github.com/infocentric/graphqlApiNodeDemo/blob/master/server.js
+// https://medium.com/infocentric/setup-a-graphql-api-with-apollo-2-0-sequelize-and-express-js-608d1365d776
+// Setup appolo server for graphql 
 
 //  * * * * * * * * * * * * * * Start express server  * * * * * * * * * * * * * *
 const app = express()
@@ -71,7 +74,6 @@ Item.findAll({
       }
     }).then(items => res.json(items))
 })
-
 
 
 // Delete all done items
