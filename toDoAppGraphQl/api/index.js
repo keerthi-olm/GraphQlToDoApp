@@ -83,6 +83,14 @@ Item.destroy({
     }).then(items => res.json(items))
 })
 
+// Delete all items
+app.delete('/api/delete_items', (req, res) => {
+Item.destroy( {
+  where: {},
+  truncate: true
+}).then(items => res.json(items))
+})
+
 
 //Listen to port
 const port = 3000

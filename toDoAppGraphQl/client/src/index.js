@@ -9,22 +9,14 @@ class ToDoApp extends React.Component {
   constructor(props) {
     super();
     var items=[];
-
-
     this.state = { list: [], change: "false" , doneList:[]};
     this.newItem = React.createRef();
     this.doneList=[...props.doneList];
     this.list=[...this.state.list];
-    console.clear();
-    console.log(
-      "ToDoApp-> Constructor :  list is initialised as..." +
-        JSON.stringify(this.list)
-    );
   }
 
 componentDidMount() {
-this.getItems(this);
-  
+   this.getItems(this);
 }
 
 getItems() {
@@ -100,64 +92,50 @@ let done=this.state.doneList;
   };
 
  _handleResetList = () => {
-    //  let newItem =this.refs.newItem.value;
-    console.log("\n ***Reset Button Pressed... **");
-    console.log(
-      "Reset handler will reset list to default values..." +
-        JSON.stringify(ToDoApp.defaultProps.list)
-    );
+    let getItems=this.getItems;
+    let _self=this;
+        axios.delete(`http://localhost:3000/api/delete_items`,{
+      },{crossDomain: true},)
+      .then(function (response) {
+        getItems.call(_self)
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-    this.setState({ list: [...ToDoApp.defaultProps.list] });
   };
 
   _handleRemoveDoneItems = e => {
-
-
-    this.doneList.sort((a, b) => a - b);
-    console.log(this.doneList);
-    for (var i = this.doneList.length -1; i >= 0; i--)
-       this.list.splice(this.doneList[i],1);
-
-    this.setState({ list: [...this.list] });
-   
-    console.log(this.list);
-    this.doneList=[];
+    let getItems=this.getItems;
+    let _self=this;
+        axios.delete(`http://localhost:3000/api/delete_done_items`,{
+      },{crossDomain: true},)
+      .then(function (response) {
+        getItems.call(_self)
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
   };
 
   _handleUpdateDoneList = (id,done) => {
-console.log(id);
-let getItems=this.getItems;
-let _self=this;
-axios.post(`http://localhost:3000/api/done_items`,{
-    done: !done,
-    id: id,
-  },{crossDomain: true},)
-  .then(function (response) {
-    getItems.call(_self)
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-
-      // this.state.list
-
-      // let checkIfInDoneList = this.doneList.filter(function (val) {
-      //     return (val === id);
-      // });
-
-      // if (checkIfInDoneList===undefined || checkIfInDoneList.length===0) {
-      // // add to list
-      // this.doneList.push(id);
-      // } else {
-      // //delete from list
-      // this.doneList= this.doneList.filter(function (val) {
-      //     return (val !== id);
-      // });
-      // }
-      //      console.log('donelist afterremove-->');
-      //      console.log(this.doneList);
+    console.log(id);
+    let getItems=this.getItems;
+    let _self=this;
+    axios.post(`http://localhost:3000/api/done_items`,{
+        done: !done,
+        id: id,
+      },{crossDomain: true},)
+      .then(function (response) {
+        getItems.call(_self)
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
   };
 
