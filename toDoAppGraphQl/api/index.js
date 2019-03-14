@@ -25,7 +25,6 @@ app.use(bodyParser.json());
 
 // create a item
 app.post('/api/items', (req, res) => {
-    console.log(req.body)
     Item.create(req.body)
         .then(item => res.json(item))
 })
@@ -50,7 +49,17 @@ Item.update({
 })
 })
 
+// update  done item
+app.post('/api/done_items', (req, res) => {
+Item.update({   
+    done: req.body.done
 
+}, {
+    where: {
+        id: req.body.id
+    }
+}).then(items => res.json(items))
+})
 
 
 // get all done items
