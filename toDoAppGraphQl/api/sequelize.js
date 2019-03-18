@@ -21,7 +21,7 @@ const Item = ItemModel(sequelize, Sequelize)
 // each Blog can have multiple tags and each Tag can have multiple blogs
 // const ItemDone = sequelize.define('blog_tag', {})
 // const Blog = BlogModel(sequelize, Sequelize)
-const Done = DoneModel(sequelize, Sequelize)
+// const Done = DoneModel(sequelize, Sequelize)
 
 // Blog.belongsToMany(Tag, { through: BlogTag, unique: false })
 // Tag.belongsToMany(Blog, { through: BlogTag, unique: false })
@@ -42,6 +42,5 @@ sequelize.sync({ force: true})
 
 // * * * * * * * * * * * * * * Export models so other pasrtsc can use * * * * * * * * * * * * * *
 module.exports = {
-  Item,
-  Done
+  Item
 }

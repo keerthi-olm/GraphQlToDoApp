@@ -1,0 +1,48 @@
+export default `
+  type Author {
+    id: ID!
+    text: String!
+    done: Boolean!
+  }
+  type Query {
+    itemss: [Item!]!
+  }
+  type Mutation {
+    createItem(text: String): Item!
+    updateItem(id: ID!, done:Boolean!): Item!
+    deletePost(id: ID!): Item!
+  }
+  `;
+
+------------------------------------------
+
+export default {
+  Item: {
+    author: (parent, args, context, info) => parent.getAuthor(),
+  },
+  Query: {
+    items: (parent, args, { db }, info) => db.post.findAll(),
+  },
+  Mutation: {
+    createItem: (parent, { text}, { db }, info) =>
+      db.post.create({
+        text: text
+      }),
+    updatePost: (parent, { text,id}, { db }, info) =>
+      db.post.update({
+        text: text
+      },
+      {
+        where: {
+          id: id
+        }
+      }),
+    deleteItem: (parent, {id}, { db }, info) =>
+      db.post.destroy({
+        where: {
+          id: id
+        }
+      })
+  }
+};
+
