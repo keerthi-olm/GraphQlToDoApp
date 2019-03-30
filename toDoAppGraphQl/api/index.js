@@ -34,8 +34,8 @@ const typeDefs = `
   }
   type Mutation {
     createItem(text: String): Item!
-    updateItem(id: ID!, done:Boolean!): Item!
-    deleteItem(id: ID!): Item!
+    updateItem(id: ID!, done:Boolean!): Item
+    deleteItem(id: ID!): Item
   }
   `;
 
@@ -46,24 +46,31 @@ const resolvers = {
   },
   Mutation: {
     createItem: (parent, { text}, { db }, info) =>
-      db.post.create({
+      db.Item.create({
         text: text
       }),
-    updateItem: (parent, { text,id}, { db }, info) =>
-      db.post.update({
-        text: text
+    updateItem: (parent, { id,done}, { db }, info) =>
+      db.Item.update({
+        done: done
       },
       {
         where: {
           id: id
-        }
-      }),
+        },returning: true,
+  plain: true
+      }).then(function(instance){
+          // instance = null if row has not been deleted
+          console.log("insta>");
+        }),
     deleteItem: (parent, {id}, { db }, info) =>
-      db.post.destroy({
+      db.Item.destroy({
         where: {
           id: id
         }
-      })
+      }).then(function(instance){
+          // instance = null if row has not been deleted
+          console.log('instance = null if row has not been deleted');
+        })
   }
 };
 
