@@ -36,6 +36,8 @@ const typeDefs = `
     createItem(text: String): Item!
     updateItem(id: ID!, done:Boolean!): Item
     deleteItem(id: ID!): Item
+    deleteDoneItems: [Item]
+    resetItems:[Item]
   }
   `;
 
@@ -67,6 +69,23 @@ const resolvers = {
         where: {
           id: id
         }
+      }).then(function(instance){
+          // instance = null if row has not been deleted
+          console.log('instance = null if row has not been deleted');
+        }),
+    deleteDoneItems: (parent, {},{ db }, info) =>
+      db.Item.destroy({
+        where: {
+          done: true
+        }
+      }).then(function(instance){
+          // instance = null if row has not been deleted
+          console.log('instance = null if row has not been deleted');
+        }),
+    resetItems: (parent, {},{ db }, info) =>
+      db.Item.destroy({
+         where: {},
+          truncate: true
       }).then(function(instance){
           // instance = null if row has not been deleted
           console.log('instance = null if row has not been deleted');

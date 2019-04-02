@@ -21,10 +21,17 @@ componentDidMount() {
 }
 
 getItems() {
+axios({
+  url: 'http://localhost:3000/graphql',
+  method: 'post',
+  data: { 
+        query:` {
+          items {id,text,done}
+        }`
+   }  
 
-  axios(`http://localhost:3000/api/items`,{crossDomain: true})
-  .then(res => {
-    const myitems = res.data;
+},{crossDomain: true}).then(res => {
+    const myitems = res.data.data.items;
     // this.setState({ persons });
     var items_list=[...myitems];
     var items=items_list.map(function(a){return a.text});
@@ -34,7 +41,22 @@ getItems() {
 
     var doneList=filtered.map(function(a){return a.id });
     this.setState({ list: [...items_list] ,doneList:[...doneList] });  
+    console.log(myitems);
   });
+
+  // axios(`http://localhost:3000/api/items`,{crossDomain: true})
+  // .then(res => {
+  //   const myitems = res.data;
+  //   // this.setState({ persons });
+  //   var items_list=[...myitems];
+  //   var items=items_list.map(function(a){return a.text});
+  //   var filtered = items_list.filter(function(value, index, arr){  
+  //                                   return value.done===true;
+  //                                   });
+
+  //   var doneList=filtered.map(function(a){return a.id });
+  //   this.setState({ list: [...items_list] ,doneList:[...doneList] });  
+  // });
 }
 
 componentWillUpdate(nextProps, nextState) {
@@ -75,38 +97,87 @@ let done=this.state.doneList;
     let getItems=this.getItems;
     let _self=this;
 
-    axios.post(`http://localhost:3000/api/items`,{
-    text: newItem,
-      },{crossDomain: true},)
-      .then(function (response) {
-        getItems.call(_self);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axios({
+      url: 'http://localhost:3000/graphql',
+      method: 'post',
+      data: { 
+      query:`mutation {
+         createItem(text:"${newItem}"){id,text}
+        
+       }`
+       }  
+    }).then(function (response) {
+            getItems.call(_self);
+          })
+          .catch(function (error) {
+            console.log(error);
+    });
 
-  };
+  //   axios.post(`http://localhost:3000/api/items`,{
+  //   text: newItem,
+  //     },{crossDomain: true},)
+  //     .then(function (response) {
+  //       getItems.call(_self);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+
+   };
 
  _handleResetList = () => {
+
+
     let getItems=this.getItems;
     let _self=this;
-        axios.delete(`http://localhost:3000/api/delete_items`,{
-      },{crossDomain: true},)
-      .then(function (response) {
+          axios({
+      url: 'http://localhost:3000/graphql',
+      method: 'post',
+      data: { 
+      query:`mutation {
+         resetItems {id,text,done}
+        
+       }`
+       }  
+    }).then(function (response) {
         getItems.call(_self);
       })
       .catch(function (error) {
         console.log(error);
       });
+
+      //   axios.delete(`http://localhost:3000/api/delete_items`,{
+      // },{crossDomain: true},)
+      // .then(function (response) {
+      //   getItems.call(_self);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
 
   };
 
   _handleRemoveDoneItems = e => {
     let getItems=this.getItems;
     let _self=this;
-        axios.delete(`http://localhost:3000/api/delete_done_items`,{
-      },{crossDomain: true},)
-      .then(function (response) {
+      //   axios.delete(`http://localhost:3000/api/delete_done_items`,{
+      // },{crossDomain: true},)
+      // .then(function (response) {
+      //   getItems.call(_self);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+          axios({
+      url: 'http://localhost:3000/graphql',
+      method: 'post',
+      data: { 
+      query:`mutation {
+         deleteDoneItems {id,text,done}
+        
+       }`
+       }  
+    }).then(function (response) {
         getItems.call(_self);
       })
       .catch(function (error) {
@@ -116,13 +187,31 @@ let done=this.state.doneList;
   };
 
   _handleUpdateDoneList = (id,done) => {
+
+
     let getItems=this.getItems;
     let _self=this;
-    axios.post(`http://localhost:3000/api/done_items`,{
-        done: !done,
-        id: id,
-      },{crossDomain: true},)
-      .then(function (response) {
+    // axios.post(`http://localhost:3000/api/done_items`,{
+    //     done: !done,
+    //     id: id,
+    //   },{crossDomain: true},)
+    //   .then(function (response) {
+    //     getItems.call(_self);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+
+    axios({
+      url: 'http://localhost:3000/graphql',
+      method: 'post',
+      data: { 
+      query:`mutation {
+         updateItem(id:"${id}",done: ${!done}){id,text,done}
+        
+       }`
+       }  
+    }).then(function (response) {
         getItems.call(_self);
       })
       .catch(function (error) {
