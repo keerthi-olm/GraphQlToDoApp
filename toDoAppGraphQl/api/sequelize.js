@@ -3,7 +3,7 @@ const ItemModel = require('./models/item')
 
 
 // * * * * * * * * * * * * * * * Connect to db * * * * * * * * * * * * * *
-const sequelize = new Sequelize('to_do', 'wp', 'todo', {
+const sequelize = new Sequelize('to_do', 'testuser', 'test', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
