@@ -66,18 +66,3 @@ The app will run on port 3001. You can open the app in the browser using link ht
 
 
 
-
-
-
-
-// * * * * * * * * * * * * * * * Connect to db * * * * * * * * * * * * * *
-const sequelize = new Sequelize('to_do', 'testuser', 'test', {
-  host: 'localhost',
-  dialect: 'mysql',
-  pool: {
-    max: 10,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
-})
