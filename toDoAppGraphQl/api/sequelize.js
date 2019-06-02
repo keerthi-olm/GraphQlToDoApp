@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const ItemModel = require('./models/item')
 
 
-// * * * * * * * * * * * * * * * Connect to db * * * * * * * * * * * * * *
+// * * * Connect to db * * * * * * * * * * * * * *
 const sequelize = new Sequelize('to_do', 'testuser', 'test', {
   host: 'localhost',
   dialect: 'mysql',
@@ -15,20 +15,11 @@ const sequelize = new Sequelize('to_do', 'testuser', 'test', {
 })
 
 
-//* * * * * * * * * * * * * *  Data modeling ie set up relationships etc * * * * * * * * * * * * * *
+//* *  Data modeling ie set up models relationships etc  **
 const Item = ItemModel(sequelize, Sequelize)
-// BlogTag will be our way of tracking relationship between Blog and Tag models
-// each Blog can have multiple tags and each Tag can have multiple blogs
-// const ItemDone = sequelize.define('blog_tag', {})
-// const Blog = BlogModel(sequelize, Sequelize)
-// const Done = DoneModel(sequelize, Sequelize)
 
-// Blog.belongsToMany(Tag, { through: BlogTag, unique: false })
-// Tag.belongsToMany(Blog, { through: BlogTag, unique: false })
-// Blog.belongsTo(User);
 
-//* * * * * * * * * * * * Initilise  DB by dropping and creating new tables * * * * * * * * * * * * * * * *
-// Force will force the tables to be dropped an created again
+//*** Populate tables with some initial data  **//
 sequelize.sync({ force: true})
   .then(() => {
       Item.create({
@@ -40,7 +31,7 @@ sequelize.sync({ force: true})
     console.log(`Database & tables created!`)
   })
 
-// * * * * * * * * * * * * * * Export models so other pasrtsc can use * * * * * * * * * * * * * *
+// * * * Export models so other parts can use * * * * *
 module.exports = {
   Item
 }

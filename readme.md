@@ -58,11 +58,9 @@ npm install
 
 npm start
 
-The app will run on port 3001. You can open the app in the browser using link http://localhost:3001/  (Note: the api needs to be running to use the app).
+The app will run on port 3001. You can open the app in the browser by going to link http://localhost:3001/  (Note: the api needs to be running to use the app).
 
 
 ![alt text](http://ui-design-coder.com/wp-content/uploads/2019/05/client.jpg)
-
-
 
 
